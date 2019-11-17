@@ -6,7 +6,7 @@ import { UnitModel } from "./Unit.model";
 export function UnitComponent(props: {model: UnitModel}) {
 	React.useEffect(() => {
 		props.model.modelInit();
-		props.model.emitInit();
+		props.model.emit("init");
 		return () => {
 			props.model.modelDestroy();
 		}

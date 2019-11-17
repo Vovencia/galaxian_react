@@ -12,12 +12,12 @@ export class GameModel extends BaseModel<IGameState> {
 	protected lastUnitId = 0;
 	public gameEngine: GameEngine = new GameEngine(this);
 
-	constructor(public state: IGameState, changeListener?: IListener, destroyListener?: IListener) {
-		super(changeListener, () => {
-			if (destroyListener) destroyListener();
+	constructor(public state: IGameState, onChange?: IListener, onDestroy?: IListener) {
+		super(undefined, onChange, () => {
+			if (onDestroy) onDestroy();
 			this.gameEngine.destroy();
 		});
-		this.onInit(() => {
+		this.on("init", () => {
 			this.addUnit(
 				new PlayerModel({
 					id: this.createNextUnitId(),
@@ -65,7 +65,7 @@ export class GameModel extends BaseModel<IGameState> {
 		this.updateState({
 			units: this.state.units.concat([unit]),
 		});
-		unit.onChange(this.emitChange);
+		unit.on("change", () => this.emit("change"));
 	}
 
 	public addRandomEnemy() {

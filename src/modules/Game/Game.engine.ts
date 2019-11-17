@@ -15,7 +15,7 @@ export class GameEngine {
 
 	public start() {
 		this.playing = true;
-		this.gameModel.getPlayerModel().onChange(this.checkCollisions);
+		this.gameModel.getPlayerModel().on("change", this.checkCollisions);
 		this.speedInterval = setInterval(() => this.speedUp(), 1000);
 		this.tick();
 	}

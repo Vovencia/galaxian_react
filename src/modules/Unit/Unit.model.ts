@@ -10,9 +10,9 @@ export class UnitModel<IState extends IUnitModelState = IUnitModelState> extends
 	public destroyed = false;
 	public showCollisionShape = false;
 
-	constructor(public state: IState, changeListener?: IListener, destroyListener?: IListener) {
-		super(changeListener, () => {
-			if (destroyListener) destroyListener();
+	constructor(public state: IState, onChange?: IListener, onDestroy?: IListener) {
+		super(undefined, onChange, () => {
+			if (onDestroy) onDestroy();
 			this.destroyed = true;
 		});
 	}

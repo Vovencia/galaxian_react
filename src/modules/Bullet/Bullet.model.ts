@@ -10,7 +10,7 @@ export class BulletModel extends UnitModel<IBulletModelState> {
 			...(isPlayer ? ship.gameModel.state.playerBulletState : ship.gameModel.state.enemyBulletState),
 			id: ship.gameModel.createNextUnitId(),
 			position: ship.state.position
-		}, ship.gameModel.emitChange);
+		}, undefined, () => ship.gameModel.emit('change'));
 		ship.gameModel.addUnit(bullet);
 	}
 

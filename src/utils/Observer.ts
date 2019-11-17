@@ -1,81 +1,51 @@
+export type IEvents = "init" | "change" | "destroy" | "custom"
+
 export class Observer {
-	private _initListeners!: IListener[];
-	private _changeListeners!: IListener[];
-	private _destroyListeners!: IListener[];
+	private _listeners!: Array<{
+		handler: IListener;
+		eventName: IEvents;
+	}>;
 
-	public get changeListeners() {
-		if (!this._changeListeners) this._changeListeners = [];
-		return this._changeListeners;
-	}
-	public get destroyListeners() {
-		if (!this._destroyListeners) this._destroyListeners = [];
-		return this._destroyListeners;
-	}
-	public get initListeners() {
-		if (!this._initListeners) this._initListeners = [];
-		return this._initListeners;
+	public get listeners() {
+		if (!this._listeners) this._listeners = [];
+		return this._listeners;
 	}
 
-	constructor(changeListener?: IListener, destroyListener?: IListener) {
-		if (changeListener) {
-			this.onChange(changeListener);
-		}
-		if (destroyListener) {
-			this.onDestroy(destroyListener);
-		}
+	constructor(onInit?: IListener, onChange?: IListener, onDestroy?: IListener) {
+		if (onInit) this.on("init", onInit);
+		if (onChange) this.on("change", onChange);
+		if (onDestroy) this.on("destroy", onDestroy);
 	}
-	public emitChange = () => {
-		for (const listener of this.changeListeners) {
-			listener();
-		}
-	};
-	public emitDestroy = () => {
-		for (const listener of this.destroyListeners) {
-			listener();
-		}
-	};
-	public emitInit = () => {
-		for (const listener of this.initListeners) {
-			listener();
+
+	public emit = (eventName: IEvents, ...args: any[]) => {
+		for (const listener of this.listeners) {
+			if (eventName !== listener.eventName) {
+				continue;
+			}
+			listener.handler(...args);
 		}
 	};
 
-	public onChange = (listener: IListener) => {
-		const index = this.changeListeners.length;
-		this.changeListeners.push(listener);
+	public on = (eventName: IEvents, handler: IListener) => {
+		const index = this.listeners.length;
+		this.listeners.push({
+			eventName,
+			handler,
+		});
 		return () => {
-			this.changeListeners.splice(index, 1);
-		};
-	};
-
-	public onDestroy = (listener: IListener) => {
-		const index = this.destroyListeners.length;
-		this.destroyListeners.push(listener);
-		return () => {
-			this.destroyListeners.splice(index, 1);
-		};
-	};
-	public onInit = (listener: IListener) => {
-		const index = this.initListeners.length;
-		this.initListeners.push(listener);
-		return () => {
-			this.initListeners.splice(index, 1);
+			this.listeners.splice(index, 1);
 		};
 	};
 
 	public clearListeners = () => {
-		this._initListeners = [];
-		this._changeListeners = [];
-		this._destroyListeners = [];
+		this._listeners = [];
 	};
 
 	public destroy = () => {
-		this.emitDestroy();
+		this.emit("destroy");
 		this.clearListeners();
-		delete this._changeListeners;
-		delete this._destroyListeners;
-		delete this._initListeners;
+		delete this._listeners;
 	};
 }
 
-export type IListener = () => void;
+export type IListener = (...args: any[]) => void;

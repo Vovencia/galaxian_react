@@ -5,9 +5,9 @@ export abstract class BaseModel<IState extends {}> extends Observer {
 	public abstract state: IState;
 	public _version = `${Date.now()}${Math.random()}`;
 	protected isEmitChangeEnabled = true;
-	protected constructor(changeListener?: IListener, destroyListener?: IListener) {
-		super(changeListener, destroyListener);
-		this.onChange(() => {
+	protected constructor(onInit?: IListener, onChange?: IListener, onDestroy?: IListener) {
+		super(onInit, onChange, onDestroy);
+		this.on("change", () => {
 			this._version = `${Date.now()}${Math.random()}`;
 		});
 	}
@@ -15,7 +15,7 @@ export abstract class BaseModel<IState extends {}> extends Observer {
 	public setState = (state: IState) => {
 		if (this.state === state) return;
 		this.state = state;
-		if (this.isEmitChangeEnabled) this.emitChange();
+		if (this.isEmitChangeEnabled) this.emit("change");
 	};
 
 	public updateState = (state: NonStrict<IState>) => {

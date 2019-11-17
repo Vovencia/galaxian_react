@@ -16,11 +16,11 @@ export class GameContainer extends React.Component<{ onGameEnd: ((gameModel: Gam
 	protected shootInterval: any;
 
 	public componentDidMount() {
-		this.gameModel.onChange(() => {
+		this.gameModel.on("change", () => {
 			this.setState({_version: this.gameModel._version});
 		});
 		this.gameModel.onStop = () => this.props.onGameEnd(this.gameModel);
-		this.gameModel.emitInit();
+		this.gameModel.emit("init");
 	}
 	public componentWillUnmount() {
 		this.gameModel.destroy();
