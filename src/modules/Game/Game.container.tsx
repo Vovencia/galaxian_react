@@ -69,6 +69,7 @@ export class GameContainer extends React.Component<{ onGameEnd: ((gameModel: Gam
 	};
 
 	shoot = () => {
+		if (!this.gameModel.gameEngine.playing) return;
 		this.gameModel.getPlayerModel().shoot();
 	}
 }
