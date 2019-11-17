@@ -1,0 +1,7 @@
+.score {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 30px;
+    z-index: 100;
+}

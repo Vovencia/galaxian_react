@@ -1,0 +1,8 @@
+.unit {
+    position: absolute;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}

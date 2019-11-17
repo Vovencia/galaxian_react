@@ -1,0 +1,16 @@
+.menu {
+    align-self: center;
+    margin: auto;
+}
+.menu__score {
+    font-size: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.menu__start-game {
+    text-align: center;
+    margin-top: 30px;
+}
+.menu__start-game-button {
+    font-size: 20px;
+}
